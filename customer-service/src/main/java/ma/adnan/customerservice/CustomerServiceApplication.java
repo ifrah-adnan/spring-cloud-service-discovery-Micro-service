@@ -1,10 +1,12 @@
 package ma.adnan.customerservice;
 
+import ma.adnan.customerservice.config.CustomerConfigParams;
 import ma.adnan.customerservice.entities.Customer;
 import ma.adnan.customerservice.repositories.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Bean;
  * IFRAH ADNAN
  **/
 @SpringBootApplication
+@EnableConfigurationProperties(CustomerConfigParams.class)
 public class CustomerServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CustomerServiceApplication.class,args);
