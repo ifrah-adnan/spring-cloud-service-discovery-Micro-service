@@ -1,5 +1,6 @@
 package ma.adnan.billingservice.feign;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import ma.adnan.billingservice.dto.Customer;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.hateoas.PagedModel;
@@ -15,8 +16,18 @@ import java.util.List;
 @FeignClient(name = "customer-service")
 public interface CustomerRestClient {
     @GetMapping("/customers/{id}")
+    @CircuitBreaker(name = "CustomerServiceCB",fallbackMethod = "getDefaultCustomer")
     Customer findCustomerByID(@PathVariable Long id);
 
     @GetMapping("/customers")
+    @CircuitBreaker(name = "CustomerServiceCB",fallbackMethod = "getDefaultCustomers")
     PagedModel<Customer> getAllCustomers();
+    default Customer getDefaultCustomer(Long id,Exception e){
+        return Customer.builder().id(id).name("Default name").email("Default email").build();
+
+
+    }
+    default PagedModel<Customer> getDefaultCustomers(Exception e){
+        return PagedModel.empty();
+    }
 }
